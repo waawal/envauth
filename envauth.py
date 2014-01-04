@@ -49,7 +49,7 @@ class HTTPBasic(object):
                 headers.remove(header)
                 break
 
-class EnvAuth(HTTPBasic):
+class EnvAuthWSGI(HTTPBasic):
 
     def __init__(self, app, realm='Website'):
         super(EnvAuth, self).__init__(app, environ, realm)
@@ -137,3 +137,9 @@ class BottleEnvAuth(object):
                     return BottleEnvAuth.authenticate(realm)
             return wrapper
         return decorator
+
+# Aliases
+
+wsgi = EnvAuthWSGI
+flask = FlaskEnvAuth
+bottle = BottleEnvAuth
