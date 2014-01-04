@@ -6,6 +6,10 @@
 ENVAUTH
 =======
 
+.. code:: javascript
+
+    {'username': 'password', 'anotheruser': 'pass1234'}
+
 Examples
 --------
 
