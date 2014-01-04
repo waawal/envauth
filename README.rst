@@ -1,6 +1,12 @@
 ENVAUTH
 =======
 
+
+.. image:: http://www.freepasswordmanager.com/wp-content/uploads/2013/08/strong-passwords.jpg
+    :alt: pypi
+    :align: center
+    :target: https://pypi.python.org/pypi/envauth
+
 Examples
 --------
 
