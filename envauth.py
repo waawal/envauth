@@ -61,7 +61,7 @@ class FlaskEnvAuth(object):
         """This function is called to check if a username /
         password combination is valid.
         """
-        return environ.get(username) == password:
+        return environ.get(username) == password
 
     @staticmethod
     def authenticate(realm):
@@ -101,7 +101,7 @@ class BottleEnvAuth(object):
         password combination is valid.
 
         """
-        return environ.get(username) == password:
+        return environ.get(username) == password
 
     @staticmethod
     def authenticate(realm):
