@@ -114,6 +114,7 @@ class BottleEnvAuth(object):
 
         """
         def decorator(f):
+            @wraps(f)
             def wrapper(*args, **kwargs):
                 from bottle import request, HTTPError
                 try:
