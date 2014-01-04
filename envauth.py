@@ -2,12 +2,6 @@ from os import environ
 from functools import wraps
 
 
-def remove_header(headers, name):
-    for header in headers:
-        if header[0].lower() == name.lower():
-            headers.remove(header)
-            break
-
 class HTTPBasic(object):
     """This describes a simple pattern for implementing authentication in
     WSGI middleware. This does not propose any new features or environment keys;
@@ -22,7 +16,7 @@ class HTTPBasic(object):
     def __call__(self, environ, start_response):
         def repl_start_response(status, headers, exc_info=None):
             if status.startswith('401'):
-                remove_header(headers, 'WWW-Authenticate')
+                HTTPBasic.remove_header(headers, 'WWW-Authenticate')
                 headers.append(('WWW-Authenticate', 'Basic realm="%s"' % self.realm))
             return start_response(status, headers)
         auth = environ.get('HTTP_AUTHORIZATION')
@@ -44,6 +38,13 @@ class HTTPBasic(object):
             ('WWW-Authenticate', 'Basic realm="%s"' % self.realm)]
         start_response('401 Unauthorized', headers)
         return [body]
+
+    @staticmethod
+    def remove_header(headers, name):
+        for header in headers:
+            if header[0].lower() == name.lower():
+                headers.remove(header)
+                break
 
 class EnvAuth(HTTPBasic):
 
