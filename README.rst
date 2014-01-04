@@ -3,8 +3,8 @@
     :align: left
     :target: https://pypi.python.org/pypi/envauth
 
-ENVAUTH
-=======
+$ENVAUTH
+========
 
 .. code:: javascript
 
