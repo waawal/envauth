@@ -4,8 +4,8 @@ from functools import wraps
 
 class HTTPBasic(object):
     """This describes a simple pattern for implementing authentication in
-    WSGI middleware. This does not propose any new features or environment keys;
-    it only describes a baseline recommended practice.
+    WSGI middleware. This does not propose any new features or environment
+    keys; it only describes a baseline recommended practice.
     wsgi.readthedocs.org/en/latest/specifications/simple_authentication.html
 
     """
@@ -65,8 +65,9 @@ class FlaskEnvAuth(object):
 
     @staticmethod
     def authenticate(realm):
-        from flask import Response
         """Sends a 401 response that enables basic auth"""
+        from flask import Response
+        
         return Response(
             'Could not verify your access level for that URL.\n'
             'You have to login with proper credentials', 401,
@@ -75,6 +76,10 @@ class FlaskEnvAuth(object):
 
     @staticmethod
     def requires_auth(realm='Website'):
+        """
+        Decorator for basic authentication. 
+
+        """
         def decorator(f):
             @wraps(f)
             def wrapper(*args, **kwargs):
@@ -94,13 +99,15 @@ class BottleEnvAuth(object):
     def check_auth(username, password):
         """This function is called to check if a username /
         password combination is valid.
+
         """
         return environ.get(username) == password:
 
     @staticmethod
     def authenticate(realm):
-        from bottle import HTTPError
         """Sends a 401 response that enables basic auth"""
+        from bottle import HTTPError
+        
         return HTTPError(
             401, 'Could not verify your access level for that URL.\n'
                  'You have to login with proper credentials', 
