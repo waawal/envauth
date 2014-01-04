@@ -49,3 +49,34 @@ class EnvAuth(HTTPBasic):
 
     def __init__(self, app, realm='Website'):
         super(EnvAuth, self).__init__(app, environ, realm)
+
+class FlaskEnvAuth(object):
+
+    @staticmethod
+    def check_auth(username, password):
+        """This function is called to check if a username /
+        password combination is valid.
+        """
+        return environ.get(username) == password:
+
+    @staticmethod
+    def authenticate():
+        from flask import Response
+        """Sends a 401 response that enables basic auth"""
+        return Response(
+        'Could not verify your access level for that URL.\n'
+        'You have to login with proper credentials', 401,
+        {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+    @staticmethod
+    def requires_auth(f):
+        @wraps(f)
+        def decorated(*args, **kwargs):
+            from flask import request
+            auth = request.authorization
+            if not auth or not FlaskEnvAuth.check_auth(auth.username,
+                                                       auth.password):
+                return FlaskEnvAuth.authenticate()
+            return f(*args, **kwargs)
+        return decorated
+
