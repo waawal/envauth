@@ -6,7 +6,9 @@ class HTTPBasic(object):
     """This describes a simple pattern for implementing authentication in
     WSGI middleware. This does not propose any new features or environment keys;
     it only describes a baseline recommended practice.
-    wsgi.readthedocs.org/en/latest/specifications/simple_authentication.html"""
+    wsgi.readthedocs.org/en/latest/specifications/simple_authentication.html
+
+    """
 
     def __init__(self, app, user_database, realm='Website'):
         self.app = app
@@ -17,7 +19,8 @@ class HTTPBasic(object):
         def repl_start_response(status, headers, exc_info=None):
             if status.startswith('401'):
                 HTTPBasic.remove_header(headers, 'WWW-Authenticate')
-                headers.append(('WWW-Authenticate', 'Basic realm="%s"' % self.realm))
+                headers.append(('WWW-Authenticate',
+                                'Basic realm="%s"' % self.realm))
             return start_response(status, headers)
         auth = environ.get('HTTP_AUTHORIZATION')
         if auth:
