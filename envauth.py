@@ -64,23 +64,68 @@ class FlaskEnvAuth(object):
         return environ.get(username) == password:
 
     @staticmethod
-    def authenticate():
+    def authenticate(realm):
         from flask import Response
         """Sends a 401 response that enables basic auth"""
         return Response(
-        'Could not verify your access level for that URL.\n'
-        'You have to login with proper credentials', 401,
-        {'WWW-Authenticate': 'Basic realm="Login Required"'})
+            'Could not verify your access level for that URL.\n'
+            'You have to login with proper credentials', 401,
+            {'WWW-Authenticate': 'Basic realm="%s"' % realm}
+        )
 
     @staticmethod
-    def requires_auth(f):
-        @wraps(f)
-        def decorated(*args, **kwargs):
-            from flask import request
-            auth = request.authorization
-            if not auth or not FlaskEnvAuth.check_auth(auth.username,
-                                                       auth.password):
-                return FlaskEnvAuth.authenticate()
-            return f(*args, **kwargs)
-        return decorated
+    def requires_auth(realm='Website'):
+        def decorator(f):
+            @wraps(f)
+            def wrapper(*args, **kwargs):
+                from flask import request
+                auth = request.authorization
+                if not auth or not FlaskEnvAuth.check_auth(auth.username,
+                                                           auth.password):
+                    return FlaskEnvAuth.authenticate(realm)
+                return f(*args, **kwargs)
+            return wrapper
+        return decorator
 
+
+class BottleEnvAuth(object):
+
+    @staticmethod
+    def check_auth(username, password):
+        """This function is called to check if a username /
+        password combination is valid.
+        """
+        return environ.get(username) == password:
+
+    @staticmethod
+    def authenticate(realm):
+        from bottle import HTTPError
+        """Sends a 401 response that enables basic auth"""
+        return HTTPError(
+            401, 'Could not verify your access level for that URL.\n'
+                 'You have to login with proper credentials', 
+            header={'WWW-Authenticate': 'Basic realm="%s"' % realm}
+        )
+
+    @staticmethod
+    def requires_auth(realm='Website'):
+        """
+        Decorator for basic authentication. 
+
+        """
+        def decorator(f):
+            def wrapper(*args, **kwargs):
+                from bottle import request, HTTPError
+                try:
+                    user, password = request.auth
+                except (TypeError, AttributeError):
+                    # catch AttributeError because of bug in bottle
+                    auth = False
+                else:
+                    auth = BottleEnvAuth.check_auth(user, password)
+                if auth:
+                    return f(*args, **kwargs)
+                else:
+                    return BottleEnvAuth.authenticate(realm)
+            return wrapper
+        return decorator
