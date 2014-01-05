@@ -1,4 +1,5 @@
-from os import environ
+import os
+import json
 from functools import wraps
 
 class EnvAuth(object):
@@ -9,7 +10,10 @@ class EnvAuth(object):
         password combination is valid.
 
         """
-        return environ.get(username) == password
+        credentials = json.loads(os.environ.get('ENVAUTH'))
+        for key, value in credentials.items():
+            if key == username and value == password:
+                return True
 
 class HTTPBasic(object):
     """This describes a simple pattern for implementing authentication in
