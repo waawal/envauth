@@ -25,7 +25,8 @@ Heroku Example
 
 ::
 
-    heroku config:add ENVAUTH='{"username": "password", "anotheruser": "pass1234"}'
+    $ heroku config:add ENVAUTH='{"username": "password", "anotheruser": "pass1234"}'
+    Setting config vars and restarting application... done, v2
 
 Examples
 ========
