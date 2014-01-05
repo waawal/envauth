@@ -30,7 +30,7 @@ class HTTPBasic(object):
         self.realm = realm
 
     def __call__(self, environ, start_response):
-        def repl_start_response(status, headers, exc_info=None):
+        def repl_start_response(status, headers):
             if status.startswith('401'):
                 HTTPBasic.remove_header(headers, 'WWW-Authenticate')
                 headers.append(('WWW-Authenticate',
@@ -42,7 +42,7 @@ class HTTPBasic(object):
             assert scheme.lower() == 'basic'
             username, password = data.decode('base64').split(':', 1)
             if not EnvAuth.check_auth(username, password):
-                return self.authenticate(environ, start_response)
+                return self.authenticate(start_response)
             environ['REMOTE_USER'] = username
             del environ['HTTP_AUTHORIZATION']
             return self.app(environ, repl_start_response)
