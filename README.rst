@@ -26,6 +26,13 @@ Heroku Example
 Examples
 ========
 
+.. image:: http://www.authenticationtutorial.com/tutorial/basiclogin.gif
+    :alt: pypi
+    :align: left
+    :target: https://pypi.python.org/pypi/envauth
+
+----
+
 Flask
 -----
 
@@ -67,10 +74,3 @@ Install *envauth* with pip:
 ::
 
     $ pip install envauth
-
----
-
-.. image:: http://www.authenticationtutorial.com/tutorial/basiclogin.gif
-    :alt: pypi
-    :align: center
-    :target: https://pypi.python.org/pypi/envauth
