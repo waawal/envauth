@@ -45,7 +45,8 @@ class HTTPBasic(object):
                 return self.authenticate(environ, start_response)
             environ['REMOTE_USER'] = username
             del environ['HTTP_AUTHORIZATION']
-        return self.app(environ, repl_start_response)
+            return self.app(environ, repl_start_response)
+        return self.authenticate(environ, repl_start_response)
 
     def authenticate(self, environ, start_response):
         body = 'Please authenticate'
@@ -66,7 +67,7 @@ class HTTPBasic(object):
 class EnvAuthWSGI(HTTPBasic):
 
     def __init__(self, app, realm='Website'):
-        super(EnvAuth, self).__init__(app, realm)
+        super(EnvAuthWSGI, self).__init__(app, realm)
 
 class FlaskEnvAuth(object):
 
