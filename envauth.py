@@ -1,6 +1,15 @@
 from os import environ
 from functools import wraps
 
+class EnvAuth(object):
+
+    @staticmethod
+    def check_auth(username, password):
+        """This function is called to check if a username /
+        password combination is valid.
+
+        """
+        return environ.get(username) == password
 
 class HTTPBasic(object):
     """This describes a simple pattern for implementing authentication in
@@ -12,7 +21,6 @@ class HTTPBasic(object):
 
     def __init__(self, app, user_database, realm='Website'):
         self.app = app
-        self.user_database = user_database
         self.realm = realm
 
     def __call__(self, environ, start_response):
@@ -27,17 +35,11 @@ class HTTPBasic(object):
             scheme, data = auth.split(None, 1)
             assert scheme.lower() == 'basic'
             username, password = data.decode('base64').split(':', 1)
-            if not self.check_auth(username, password):
+            if not EnvAuth.check_auth(username, password):
                 return self.authenticate(environ, start_response)
             environ['REMOTE_USER'] = username
             del environ['HTTP_AUTHORIZATION']
         return self.app(environ, repl_start_response)
-
-    def check_auth(self, username, password):
-        """This function is called to check if a username /
-        password combination is valid.
-        """
-        return user_database.get(username) == password
 
     def authenticate(self, environ, start_response):
         body = 'Please authenticate'
@@ -58,16 +60,9 @@ class HTTPBasic(object):
 class EnvAuthWSGI(HTTPBasic):
 
     def __init__(self, app, realm='Website'):
-        super(EnvAuth, self).__init__(app, environ, realm)
+        super(EnvAuth, self).__init__(app, realm)
 
 class FlaskEnvAuth(object):
-
-    @staticmethod
-    def check_auth(username, password):
-        """This function is called to check if a username /
-        password combination is valid.
-        """
-        return environ.get(username) == password
 
     @staticmethod
     def authenticate(realm):
@@ -91,7 +86,7 @@ class FlaskEnvAuth(object):
             def wrapper(*args, **kwargs):
                 from flask import request
                 auth = request.authorization
-                if not auth or not FlaskEnvAuth.check_auth(auth.username,
+                if not auth or not EnvAuth.check_auth(auth.username,
                                                            auth.password):
                     return FlaskEnvAuth.authenticate(realm)
                 return f(*args, **kwargs)
@@ -100,14 +95,6 @@ class FlaskEnvAuth(object):
 
 
 class BottleEnvAuth(object):
-
-    @staticmethod
-    def check_auth(username, password):
-        """This function is called to check if a username /
-        password combination is valid.
-
-        """
-        return environ.get(username) == password
 
     @staticmethod
     def authenticate(realm):
@@ -136,7 +123,7 @@ class BottleEnvAuth(object):
                     # catch AttributeError because of bug in bottle
                     auth = False
                 else:
-                    auth = BottleEnvAuth.check_auth(user, password)
+                    auth = EnvAuth.check_auth(user, password)
                 if auth:
                     return f(*args, **kwargs)
                 else:
