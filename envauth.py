@@ -25,7 +25,7 @@ class HTTPBasic(object):
 
     """
 
-    def __init__(self, app, user_database, realm='Website'):
+    def __init__(self, app, realm='Website'):
         self.app = app
         self.realm = realm
 
