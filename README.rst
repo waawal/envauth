@@ -1,6 +1,6 @@
 .. image:: http://www.authenticationtutorial.com/tutorial/basiclogin.gif
     :alt: pypi
-    :align: left
+    :align: center
     :target: https://pypi.python.org/pypi/envauth
 
 Super simple authentication middleware for when you quickly need to password
@@ -21,7 +21,7 @@ The keys are the usernames and the value contains the password for the user.
 Heroku Example
 --------------
 
-``envauth`` is especially useful if you happen to run your application on a PAAS!
+``envauth`` is especially useful if you happen to be running your application on a PAAS!
 
 ::
 
