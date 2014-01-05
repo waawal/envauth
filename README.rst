@@ -1,8 +1,3 @@
-.. image:: http://www.authenticationtutorial.com/tutorial/basiclogin.gif
-    :alt: pypi
-    :align: center
-    :target: https://pypi.python.org/pypi/envauth
-
 Super simple authentication middleware for when you quickly need to password
 protect something and don't have the time to implement rigorous authentication.
 Support out of the box is implemented for ``Flask``, ``bottle`` and generic ``WSGI``
@@ -72,3 +67,10 @@ Install *envauth* with pip:
 ::
 
     $ pip install envauth
+
+---
+
+.. image:: http://www.authenticationtutorial.com/tutorial/basiclogin.gif
+    :alt: pypi
+    :align: center
+    :target: https://pypi.python.org/pypi/envauth
