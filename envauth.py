@@ -27,11 +27,17 @@ class HTTPBasic(object):
             scheme, data = auth.split(None, 1)
             assert scheme.lower() == 'basic'
             username, password = data.decode('base64').split(':', 1)
-            if self.user_database.get(username) != password:
+            if not self.check_auth(username, password):
                 return self.authenticate(environ, start_response)
             environ['REMOTE_USER'] = username
             del environ['HTTP_AUTHORIZATION']
         return self.app(environ, repl_start_response)
+
+    def check_auth(self, username, password):
+        """This function is called to check if a username /
+        password combination is valid.
+        """
+        return user_database.get(username) == password
 
     def authenticate(self, environ, start_response):
         body = 'Please authenticate'
