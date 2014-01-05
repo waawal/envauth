@@ -13,6 +13,8 @@ class EnvAuth(object):
 
         """
         credentials = json.loads(os.environ.get('ENVAUTH'))
+        if credentials is None:
+            return False
         return credentials.get(username) == password
 
 class HTTPBasic(object):
