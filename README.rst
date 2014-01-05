@@ -19,6 +19,8 @@ The keys are the usernames and the values contains the passwords.
 Heroku Example
 --------------
 
+::
+
     heroku config:add ENVAUTH='{"username": "password", "anotheruser": "pass1234"}'
 
 Examples
