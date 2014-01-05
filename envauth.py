@@ -2,6 +2,8 @@ import os
 import json
 from functools import wraps
 
+__all__ = ['bottle', 'flask', 'wsgi']
+
 class EnvAuth(object):
 
     @staticmethod
