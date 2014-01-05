@@ -11,9 +11,7 @@ class EnvAuth(object):
 
         """
         credentials = json.loads(os.environ.get('ENVAUTH'))
-        for key, value in credentials.items():
-            if key == username and value == password:
-                return True
+        return credentials.get(username) == password
 
 class HTTPBasic(object):
     """This describes a simple pattern for implementing authentication in
