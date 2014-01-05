@@ -46,9 +46,9 @@ class HTTPBasic(object):
             environ['REMOTE_USER'] = username
             del environ['HTTP_AUTHORIZATION']
             return self.app(environ, repl_start_response)
-        return self.authenticate(environ, repl_start_response)
+        return self.authenticate(repl_start_response)
 
-    def authenticate(self, environ, start_response):
+    def authenticate(self, start_response):
         body = 'Please authenticate'
         headers = [
             ('content-type', 'text/plain'),
