@@ -28,12 +28,12 @@ class HTTPBasic(object):
             assert scheme.lower() == 'basic'
             username, password = data.decode('base64').split(':', 1)
             if self.user_database.get(username) != password:
-                return self.bad_auth(environ, start_response)
+                return self.authenticate(environ, start_response)
             environ['REMOTE_USER'] = username
             del environ['HTTP_AUTHORIZATION']
         return self.app(environ, repl_start_response)
 
-    def bad_auth(self, environ, start_response):
+    def authenticate(self, environ, start_response):
         body = 'Please authenticate'
         headers = [
             ('content-type', 'text/plain'),
