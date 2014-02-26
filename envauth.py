@@ -2,7 +2,7 @@ import os
 import json
 from functools import wraps
 
-__all__ = ['bottle', 'flask', 'wsgi']
+__all__ = ['bottle', 'flask', 'wsgi', 'django']
 
 class EnvAuth(object):
 
@@ -138,8 +138,36 @@ class BottleEnvAuth(object):
             return wrapper
         return decorator
 
+
+class DjangoEnvAuth(object):
+    
+    def authenticate(self, realm='Website'):
+        from django.http import HttpResponse
+        response = HttpResponse(
+            'Could not verify your access level for that URL.\n'
+            'You have to login with proper credentials')
+        response['WWW-Authenticate'] = 'Basic realm="{}"'.format(realm)
+        response.status_code = 401
+        return response
+    
+    def process_request(self, request):
+        if not request.META.has_key('HTTP_AUTHORIZATION'):
+            return self.authenticate()
+        else:
+            authentication = request.META['HTTP_AUTHORIZATION']
+            (auth_method, auth) = authentication.split(' ',1)
+            if 'basic' != auth_method.lower():
+                return self.authenticate()
+            auth = auth.strip().decode('base64')
+            user, password = auth.split(':',1)
+            if EnvAuth.check_auth(user, password):
+                return None 
+            return self.authenticate()
+
+
 # Aliases
 
 wsgi = EnvAuthWSGI
 flask = FlaskEnvAuth
 bottle = BottleEnvAuth
+django = DjangoEnvAuth
